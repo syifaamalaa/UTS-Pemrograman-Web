@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SPA Vue.js Example</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 5%;
+            font-family: 'Quicksand', sans-serif;
+        }
+        nav a {
+            margin: 0 10px;
+            text-decoration: none;
+            color: #333;
+        }
+        .active-link {
+            font-weight: bold;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <header>
+            <h1>My Vue.js SPA</h1>
+            <p>A Simple Single Page Application Example with Vue.js</p>
+            <nav>
+                <router-link to="/" exact-active-class="active-link">Home</router-link> |
+                <router-link to="/about" exact-active-class="active-link">About</router-link> |
+                <router-link to="/kelas" exact-active-class="active-link">Kelas</router-link>
+            </nav>
+        </header>
+        <hr>
+        
+        <!-- Router View -->
+        <router-view></router-view>
+        
+        <hr>
+        <footer>
+            <p>&copy; Praktisi Mengajar - 2024 | Vue.js</p>
+        </footer>
+    </div>
+
+    <!-- Include Vue.js and Vue Router -->
+    <script src="https://cdn.jsdelivr.net/npm/vue@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3"></script>
+    
+    <script>
+        // Define components for each page
+        const Home = {
+            template: `
+                <div>
+                    <h2>Welcome to Our SPA</h2>
+                    <p>This is a simple single-page application built with Vue.js and Vue Router.</p>
+                    <p>Use the navigation above to explore the different pages in this app:</p>
+                    <ul>
+                        <li><strong>Home</strong>: You are here. Learn more about this application.</li>
+                        <li><strong>About</strong>: Information about this SPA and its purpose.</li>
+                        <li><strong>Kelas</strong>: Manage and explore the list of available classes.</li>
+                    </ul>
+                    <img src="bg 600x200.jpg" alt="SPA" width= "600x200">
+                </div>
+            `
+        };
+
+        const About = {
+            template: `
+                <div>
+                    <h2>About This Application</h2>
+                    <p>This single-page application (SPA) was created as an example project using Vue.js and Vue Router.</p>
+                    <p>The goal of this project is to demonstrate the capabilities of Vue.js for creating interactive and responsive user interfaces without the need for full page reloads.</p>
+                    <p><strong>Key Features:</strong></p>
+                    <ul>
+                        <li>Navigation between pages without refreshing the entire page.</li>
+                        <li>Manage and display a dynamic list of classes.</li>
+                        <li>Simple and minimalistic design for easy understanding and navigation.</li>
+                    </ul>
+                </div>
+            `
+        };
+
+        const Kelas = {
+            template: `
+                <div>
+                    <h2>Class Management</h2>
+                    <p>Here you can add new classes to the list or remove existing ones.</p>
+                    <input type="text" placeholder="Enter Class Name" v-model="newClass" @keyup.enter="addClass" />
+                    <button @click="addClass">Add Class</button>
+                    <h3>Available Classes ({{ classes.length }})</h3>
+                    <ul v-if="classes.length">
+                        <li v-for="(className, index) in classes" :key="index">
+                            {{ index + 1 }}. {{ className }}
+                            <button @click="removeClass(index)">Remove</button>
+                        </li>
+                    </ul>
+                    <p v-else>No classes available. Please add one using the input above.</p>
+                </div>
+            `,
+            data() {
+                return {
+                    classes: ["Mathematics", "Science", "History"],
+                    newClass: ""
+                };
+            },
+            methods: {
+                addClass() {
+                    if (this.newClass.trim()) {
+                        this.classes.push(this.newClass.trim());
+                        this.newClass = "";
+                    }
+                },
+                removeClass(index) {
+                    this.classes.splice(index, 1);
+                }
+            }
+        };
+
+        // Define routes
+        const routes = [
+            { path: '/', component: Home },
+            { path: '/about', component: About },
+            { path: '/kelas', component: Kelas }
+        ];
+
+        // Create router instance
+        const router = new VueRouter({
+            routes
+        });
+
+        // Create main Vue instance
+        new Vue({
+            el: '#app',
+            router
+        });
+    </script>
+</body>
+</html>
